@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
 namespace Day2.Models
 {
@@ -50,7 +47,7 @@ namespace Day2.Models
             else
             {
                 var i = 0;
-                foreach (Student s in students)
+                foreach (var s in students)
                 {
                     studentData.Add(new List<string>(5) { i.ToString(), s.Name, s.Age.ToString(), s.College, s.Year.ToString() });
                     ++i;

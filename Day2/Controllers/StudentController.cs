@@ -1,12 +1,10 @@
 ﻿using Day2.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 
-namespace WebApplication23.Controllers
+namespace Day2.Controllers
 {
     public class StudentController : ApiController
     {
@@ -26,25 +24,26 @@ namespace WebApplication23.Controllers
 
         // POST api/student
         [HttpPost]
-        public Student Post(string name, int age, string college, int year)
+        public HttpResponseMessage Post(string name, int age, string college, int year)
         {
-            var student = new Student(name, age, college, year);
-            Database.Add(student);
-            return student;
+            Database.Add(new Student(name, age, college, year));
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
 
         // PUT api/student/5
         [HttpPut]
-        public void Put([FromUri]int id, string name, int age, string college, int year)
+        public HttpResponseMessage Put([FromUri]int id, string name, int age, string college, int year)
         {
             Database.Update(id, name, age, college, year);
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
 
         // DELETE api/student/5
         [HttpDelete]
-        public void Delete(int id)
+        public HttpResponseMessage Delete(int id)
         {
             Database.Remove(id);
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
     }
 }

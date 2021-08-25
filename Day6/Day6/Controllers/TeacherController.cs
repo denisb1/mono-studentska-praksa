@@ -1,11 +1,11 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using Day6.DAL;
+using Day6.Common;
 using Microsoft.AspNetCore.Mvc;
 using Day6.Models.REST;
-using Day6.Repository;
+using Day6.Service;
+using Microsoft.EntityFrameworkCore;
 
 namespace Day6.Controllers
 {
@@ -13,24 +13,25 @@ namespace Day6.Controllers
 	[Route("api/[controller]")]
 	public class TeacherController : ControllerBase
 	{
-		private readonly IUnitOfWork _unitOfWork;
-		private readonly IMapper _mapper;
-		private readonly IGenericRepository<TeacherDb> _repo;
+		private readonly IGenericService<TeacherRest> _service;
 
-		public TeacherController(IUnitOfWork unitOfWork, IMapper mapper)
+		public TeacherController(IGenericService<TeacherRest> service)
 		{
-			_unitOfWork = unitOfWork;
-			_mapper = mapper;
-			_repo = _unitOfWork.TeacherDbRepository;
+			_service = service;
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> GetTeacher()
+		public async Task<IActionResult> GetTeachers(string where, string order, int? page = 1, int? size = 10)
 		{
 			try
 			{
-				var teachers = await _repo.GetAll();
-				return Ok(_mapper.Map<IList<TeacherRest>>(teachers));
+				if (page == null && size == null) return BadRequest();
+
+				var teachers = await _service.GetAll(where, order);
+				var pages = PaginatedList<TeacherRest>
+					.Create(teachers.AsQueryable().AsNoTracking(), page.Value, size.Value);
+
+				return Ok(pages);
 			}
 			catch (Exception e)
 			{
@@ -43,9 +44,8 @@ namespace Day6.Controllers
 		{
 			try
 			{
-				var teacher = await _repo
-					.Get(q => q.Id == id);
-				return Ok(_mapper.Map<TeacherRest>(teacher));
+				var teacher = await _service.GetById(id);
+				return Ok(teacher);
 			}
 			catch (Exception e)
 			{
@@ -58,10 +58,7 @@ namespace Day6.Controllers
 		{
 			try
 			{
-				var teacher = _mapper.Map<TeacherDb>(teacherRest);
-				await _repo.Insert(teacher);
-				await _unitOfWork.Save();
-
+				await _service.Insert(teacherRest);
 				return Ok();
 			}
 			catch (Exception e)
@@ -75,12 +72,7 @@ namespace Day6.Controllers
 		{
 			try
 			{
-				var teacher = await _repo.Get(q => q.Id == id);
-				if (teacher == null) return BadRequest();
-
-				_mapper.Map(teacherRest, teacher);
-				_repo.Update(teacher);
-				await _unitOfWork.Save();
+				await _service.Update(id, teacherRest);
 				return Ok();
 			}
 			catch (Exception e)
@@ -94,16 +86,7 @@ namespace Day6.Controllers
 		{
 			try
 			{
-				var teachers = await _repo.GetAll(q =>
-					q.FirstName == teacherRest.FirstName &&
-					q.LastName == teacherRest.LastName &&
-					q.Department == teacherRest.Department
-				);
-
-				if (teachers == null) return BadRequest();
-
-				_repo.DeleteRange(teachers);
-				await _unitOfWork.Save();
+				await _service.Delete(teacherRest);
 				return Ok();
 			}
 			catch (Exception e)
@@ -117,11 +100,7 @@ namespace Day6.Controllers
 		{
 			try
 			{
-				var teacher = await _repo.Get(q => q.Id == id);
-				if (teacher == null) return BadRequest();
-
-				await _repo.Delete(id);
-				await _unitOfWork.Save();
+				await _service.Delete(id);
 				return Ok();
 			}
 			catch (Exception e)

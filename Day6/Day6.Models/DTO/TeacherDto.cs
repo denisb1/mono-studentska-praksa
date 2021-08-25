@@ -7,7 +7,7 @@ namespace Day6.Models.DTO
 	public class TeacherDto
 	{
 		public Guid Id { get; set; }
-		public IList<CourseDto> CourseDtos { get; set; }
+		public virtual IList<CourseDto> CourseDtos { get; set; }
 
 		[Required]
 		public string FirstName { get; set; }

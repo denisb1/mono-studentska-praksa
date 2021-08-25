@@ -1,8 +1,10 @@
 using Autofac;
 using AutoMapper.Contrib.Autofac.DependencyInjection;
-using Day6.Configurations;
+using Day6.Common;
 using Day6.DAL;
+using Day6.Models.REST;
 using Day6.Repository;
+using Day6.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -53,7 +55,10 @@ namespace Day6
 
 		public void ConfigureContainer(ContainerBuilder builder)
 		{
-			builder.RegisterType<UnitOfWork>().As<IUnitOfWork>();
+			builder.RegisterType<RepositoryWork>().As<IRepositoryWork>();
+			builder.RegisterType<StudentService>().As<IGenericService<StudentRest>>();
+			builder.RegisterType<CourseService>().As<IGenericService<CourseRest>>();
+			builder.RegisterType<TeacherService>().As<IGenericService<TeacherRest>>();
 			builder.RegisterType<DatabaseContext>().AsImplementedInterfaces().InstancePerLifetimeScope();
 			builder.RegisterAutoMapper(typeof(MapperInitializer).Assembly);
 		}

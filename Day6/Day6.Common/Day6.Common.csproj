@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
+	  <PackageReference Include="AutoMapper.Contrib.Autofac.DependencyInjection" Version="5.4.0" />
+	  <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+	  <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.9" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.9" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.9">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.3" />
+	  <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+	  <PackageReference Include="Microsoft.NETCore.App" Version="2.2.8" />
+	  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.7" />
+	  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.0" />
+	  <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.5" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Day6.DAL\Day6.DAL.csproj" />
+	  <ProjectReference Include="..\Day6.Models\Day6.Models.csproj" />
+	</ItemGroup>
+
+</Project>

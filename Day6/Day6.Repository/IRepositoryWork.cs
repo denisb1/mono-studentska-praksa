@@ -4,7 +4,7 @@ using Day6.DAL;
 
 namespace Day6.Repository
 {
-	public interface IUnitOfWork : IDisposable
+	public interface IRepositoryWork : IDisposable
 	{
 		IGenericRepository<CourseDb> CourseDbRepository { get; }
 		IGenericRepository<EnrollmentDb> EnrollmentDbRepository { get; }

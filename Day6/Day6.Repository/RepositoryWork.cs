@@ -4,7 +4,7 @@ using Day6.DAL;
 
 namespace Day6.Repository
 {
-	public class UnitOfWork : IUnitOfWork
+	public class RepositoryWork : IRepositoryWork
 	{
 		private readonly DatabaseContext _context;
 		private IGenericRepository<CourseDb> _courseDbRepository;
@@ -24,7 +24,7 @@ namespace Day6.Repository
 		public IGenericRepository<TeacherDb> TeacherDbRepository =>
 			_teacherDbRepository ??= new GenericRepository<TeacherDb>(_context);
 
-		public UnitOfWork(DatabaseContext context)
+		public RepositoryWork(DatabaseContext context)
 		{
 			_context = context;
 		}

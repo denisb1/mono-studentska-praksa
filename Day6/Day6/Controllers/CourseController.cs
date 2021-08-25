@@ -1,11 +1,11 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using Day6.DAL;
+using Day6.Common;
 using Microsoft.AspNetCore.Mvc;
 using Day6.Models.REST;
-using Day6.Repository;
+using Day6.Service;
+using Microsoft.EntityFrameworkCore;
 
 namespace Day6.Controllers
 {
@@ -13,24 +13,25 @@ namespace Day6.Controllers
 	[Route("api/[controller]")]
 	public class CourseController : ControllerBase
 	{
-		private readonly IUnitOfWork _unitOfWork;
-		private readonly IMapper _mapper;
-		private readonly IGenericRepository<CourseDb> _repo;
+		private readonly IGenericService<CourseRest> _service;
 
-		public CourseController(IUnitOfWork unitOfWork, IMapper mapper)
+		public CourseController(IGenericService<CourseRest> service)
 		{
-			_unitOfWork = unitOfWork;
-			_mapper = mapper;
-			_repo = _unitOfWork.CourseDbRepository;
+			_service = service;
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> GetCourse()
+		public async Task<IActionResult> GetCourses(string where, string order, int? page = 1, int? size = 10)
 		{
 			try
 			{
-				var courses = await _repo.GetAll();
-				return Ok(_mapper.Map<IList<CourseRest>>(courses));
+				if (page == null && size == null) return BadRequest();
+
+				var courses = await _service.GetAll(where, order);
+				var pages = PaginatedList<CourseRest>
+					.Create(courses.AsQueryable().AsNoTracking(), page.Value, size.Value);
+
+				return Ok(pages);
 			}
 			catch (Exception e)
 			{
@@ -43,9 +44,8 @@ namespace Day6.Controllers
 		{
 			try
 			{
-				var course = await _repo
-					.Get(q => q.Id == id);
-				return Ok(_mapper.Map<CourseDb>(course));
+				var course = await _service.GetById(id);
+				return Ok(course);
 			}
 			catch (Exception e)
 			{
@@ -58,10 +58,7 @@ namespace Day6.Controllers
 		{
 			try
 			{
-				var course = _mapper.Map<CourseDb>(courseRest);
-				await _repo.Insert(course);
-				await _unitOfWork.Save();
-
+				await _service.Insert(courseRest);
 				return Ok();
 			}
 			catch (Exception e)
@@ -75,12 +72,7 @@ namespace Day6.Controllers
 		{
 			try
 			{
-				var course = await _repo.Get(q => q.Id == id);
-				if (course == null) return BadRequest();
-
-				_mapper.Map(courseRest, course);
-				_repo.Update(course);
-				await _unitOfWork.Save();
+				await _service.Update(id, courseRest);
 				return Ok();
 			}
 			catch (Exception e)
@@ -94,15 +86,7 @@ namespace Day6.Controllers
 		{
 			try
 			{
-				var courses = await _repo.GetAll(q =>
-					q.CourseName == courseRest.CourseName &&
-					q.Ects == courseRest.Ects
-				);
-
-				if (courses == null) return BadRequest();
-
-				_repo.DeleteRange(courses);
-				await _unitOfWork.Save();
+				await _service.Delete(courseRest);
 				return Ok();
 			}
 			catch (Exception e)
@@ -116,11 +100,7 @@ namespace Day6.Controllers
 		{
 			try
 			{
-				var course = await _repo.Get(s => s.Id == id);
-				if (course == null) return BadRequest();
-
-				await _repo.Delete(id);
-				await _unitOfWork.Save();
+				await _service.Delete(id);
 				return Ok();
 			}
 			catch (Exception e)

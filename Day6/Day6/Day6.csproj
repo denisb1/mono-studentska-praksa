@@ -23,8 +23,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\Day6.Common\Day6.Common.csproj" />
 	  <ProjectReference Include="..\Day6.DAL\Day6.DAL.csproj" />
 	  <ProjectReference Include="..\Day6.Repository\Day6.Repository.csproj" />
+	  <ProjectReference Include="..\Day6.Service\Day6.Service.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

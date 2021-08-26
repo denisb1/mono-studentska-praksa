@@ -1,13 +1,9 @@
 using Autofac;
 using AutoMapper.Contrib.Autofac.DependencyInjection;
 using Day6.Common;
-using Day6.DAL;
-using Day6.Models.REST;
-using Day6.Repository;
-using Day6.Service;
+using Day6.Modules;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -23,25 +19,13 @@ namespace Day6
 			Configuration = configuration;
 		}
 
-		private IConfiguration Configuration { get; }
+		public IConfiguration Configuration { get; private set; }
+		public ILifetimeScope AutofacContainer { get; private set; }
 
-		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddCors(o =>
-			{
-				o.AddPolicy("CorsPolicy", builder =>
-				{
-					builder.AllowAnyOrigin()
-						.AllowAnyMethod()
-						.AllowAnyHeader();
-				});
-			});
+			services.AddControllers().AddControllersAsServices();
 
-			services.AddDbContext<DatabaseContext>(options =>
-			{
-				options.UseNpgsql(DatabaseHelper.GetInstance().ConnectionString);
-			});
 			services.AddSwaggerGen(c =>
 			{
 				c.SwaggerDoc("v1", new OpenApiInfo { Title = "Day6", Version = "v1" });
@@ -55,11 +39,10 @@ namespace Day6
 
 		public void ConfigureContainer(ContainerBuilder builder)
 		{
-			builder.RegisterType<RepositoryWork>().As<IRepositoryWork>();
-			builder.RegisterType<StudentService>().As<IGenericService<StudentRest>>();
-			builder.RegisterType<CourseService>().As<IGenericService<CourseRest>>();
-			builder.RegisterType<TeacherService>().As<IGenericService<TeacherRest>>();
-			builder.RegisterType<DatabaseContext>().AsImplementedInterfaces().InstancePerLifetimeScope();
+			builder.RegisterModule(new DalModule());
+			builder.RegisterModule(new RepositoryModule());
+			builder.RegisterModule(new ServiceModule());
+
 			builder.RegisterAutoMapper(typeof(MapperInitializer).Assembly);
 		}
 

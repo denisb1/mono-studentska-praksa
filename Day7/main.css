@@ -1,0 +1,53 @@
+body {
+	width: 500px;
+	margin: 4% auto;
+	letter-spacing: 5px;
+	font-size: 1.8rem;
+	background: #101112;
+}
+
+#input {
+	border-bottom: 1px solid white;
+	border-radius: 1px;
+	height: 56px;
+	padding-right: 15px;
+	padding-top: 10px;
+	text-align: right;
+	color: white;
+	background-color: transparent;
+	margin-right: 12px;
+	font-size: 2.4rem;
+}
+
+.operators, .numbers, .empty, #equal, #dot, #clear {
+	display: inline-block;
+	width: 60px;
+	text-align: center;
+	color: white;
+	background-color: transparent;
+
+	padding: 11px;
+	margin: 20px 4px 10px 0;
+	cursor: pointer;
+}
+
+.operators, #equal, #clear {
+	color: royalblue;
+}
+
+.empty {
+	background-color: transparent;
+	cursor: auto;
+	border: none;
+	border-radius: 0;
+}
+
+.operators:active, .numbers:active, #equal:active, #dot:active, #clear:active {
+	font-weight: bold;
+	color: black;
+	background-color: white;
+}
+
+.panel {
+	display: inline-block;
+}

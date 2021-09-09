@@ -1,0 +1,21 @@
+.note-item {
+	display: block;
+	align-items: center;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+	border-radius: 12px;
+	background-color: #272727;
+	color: aliceblue;
+}
+
+.note-item-title {
+	font-size: 2rem;
+	padding: 1rem;
+	font-weight: bold;
+	border-bottom: dashed rebeccapurple 0.08em;
+}
+
+.note-item-text {
+	font-size: 1.1rem;
+	padding: 1rem;
+	font-weight: bold;
+}

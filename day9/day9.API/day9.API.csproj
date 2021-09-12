@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.9">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.7" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\day9.DAL.Common\day9.DAL.Common.csproj" />
+	  <ProjectReference Include="..\day9.Model.Common\day9.Model.Common.csproj" />
+	  <ProjectReference Include="..\day9.Model\day9.Model.csproj" />
+	  <ProjectReference Include="..\day9.Repository\day9.Repository.csproj" />
+	  <ProjectReference Include="..\day9.Service.Common\day9.Service.Common.csproj" />
+	  <ProjectReference Include="..\day9.Service\day9.Service.csproj" />
+	</ItemGroup>
+
+</Project>

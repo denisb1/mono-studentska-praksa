@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\day9.Model\day9.Model.csproj" />
+	  <ProjectReference Include="..\day9.Repository.Common\day9.Repository.Common.csproj" />
+	  <ProjectReference Include="..\day9.Service.Common\day9.Service.Common.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="AutoMapper" Version="10.1.1" />
+	</ItemGroup>
+
+</Project>

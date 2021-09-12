@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\day9.DAL.Common\day9.DAL.Common.csproj" />
+	  <ProjectReference Include="..\day9.Repository.Common\day9.Repository.Common.csproj" />
+	</ItemGroup>
+
+</Project>
